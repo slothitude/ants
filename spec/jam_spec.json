@@ -1,0 +1,99 @@
+{
+ "title": "NecroMancer \u00e2\u20ac\u201d Agent Management Overlord",
+ "kind": "tool",
+ "engine": "godot-4.7",
+ "pitch": "Godot 4 console for driving a pool of headless agent processes: summon (spawn), whisper (chat/broadcast), heal (revive the dead), reap (remove), repeat.",
+ "art_reference": "Owner key art packed in art/ \u00e2\u20ac\u201d NecroMancer Overlord (banner, click for full view) + Orchestrator Cybernetic Ant (pool sigil). Icons: Kenney Game Icons White 2x (CC0) in icons/.",
+ "laws": [
+  "logic separate: AgentWorker (RefCounted) owns all agent state; the UI emits intents only",
+  "constants not magic: every tunable is a named const",
+  "tests ship with the milestone; gate green twice before done",
+  "no shell: commands are split locally (double quotes honoured) and run via OS.execute_with_pipe \u00e2\u20ac\u201d no injection surface",
+  "GDScript 4, tabs, Godot 4.7"
+ ],
+ "systems": [
+  "worker thread per agent: semaphore queue, mutex-guarded event bus, cancellable",
+  "echo backend when the command is blank (UI testing without a real process)",
+  "subprocess backend: {prompt} token replaced by the message, else message written to stdin",
+  "death detection: failed start or non-zero exit marks the soul DEAD with the exit code; revive()/Heal Dead restores it; whispering a dead soul auto-revives it",
+  "SSH souls: BatchMode wrap to Rog's hosts (Lappy/Ryan); remote shell semantics inside the wrap",
+  "Ant API souls (Sentdex/minion port, MIT): OpenAI-compatible turn loop, native tool_calls + [ant_tool_call] text fallback, file tools sandboxed to user://workspace/, sessions in user://ant/sessions/, endpoint presets llama-swap/OpenRouter/NVIDIA, key runtime-only",
+  "Soul base class: AgentWorker + AntSoul pooled as one typed array; honest states (DEAD only for transport/401/403 on API souls; cancel is not death)",
+  "console UI: canon-art banner (click = full art), pool list with state colors, s\u00c3\u00a9ance transcript, broadcast, idle-only optimize, status line, gothic theme, Kenney CC0 icons"
+ ],
+ "milestones": [
+  {
+   "id": "M0",
+   "scope": "themed console + worker + death/heal loop + gate suite (gate 33+35 green x2)",
+   "checks": [
+    "see tests/test_console.gd + DIARY M0"
+   ]
+  },
+  {
+   "id": "M1",
+   "scope": "ssh souls: Spawn Run-on picker (Lappy/Ryan), BatchMode wrap, splitter keeps remote as one arg (gate 33 green x2)",
+   "checks": [
+    "see tests/test_console.gd ssh checks + DIARY M1"
+   ]
+  },
+  {
+   "id": "M2",
+   "scope": "Ant API souls (minion port), Soul base class, Agent-API spawn mode with endpoint presets, mock-server gate suite (35 checks x2), canon art + icons in the GUI",
+   "checks": [
+    "native tool_calls turn; text-protocol turn; stall/empty nudges; malformed recovery; forced final",
+    "write_file approval denied + allowed; edit numbered-line fallback",
+    "401 -> DEAD + revive; 5xx -> soft error + idle; cancel midflight -> idle not dead",
+    "run_python degrades gracefully off Android; sessions save/load; console integration",
+    "console suite stays green (33 x2); boot --quit-after 120 clean"
+   ]
+  },
+  {
+   "id": "M3",
+   "scope": "mobile UX + tailnet + signal bus + MCP adder + viewport desktop + OpenWebUI bubbles + markdown (gates green x2 each step; see DIARY M3.*)",
+   "checks": [
+    "see DIARY M3/M3.2/M3.3*"
+   ]
+  },
+  {
+   "id": "M4",
+   "scope": "CPython in the Android export (Chaquopy 17.2.0 / Py3.13) via PyBridge v2 plugin; run_python tool live on phone; NVIDIA ant demo green over USB",
+   "checks": [
+    "console 39 / ant 53 / api 22 / bus 13 green x2",
+    "on-phone transcript: run_python -> NECROMANCER MOBILE ONLINE\n42",
+    "boot --quit-after 120 clean"
+   ]
+  },
+  {
+   "id": "M5",
+   "scope": "Telegram-style lobby + chat pages (540x960 portrait): search, avatars, unread badges, typing indicator, slide-in chat, viewport desktop as second page; scullm-q4 primary",
+   "checks": [
+    "console 47 / ant 53 / api 22 / bus 13 green x2",
+    "boot clean",
+    "phone reinstall + screencaps pending USB"
+   ]
+  },
+  {
+   "id": "M6",
+   "scope": "llama.cpp bundled in the APK (NDK arm64, LlamaBridge GodotPlugin) + on-device speed test of scullm-q4 (base-q4_k_m.gguf); report device vs LAN tok/s, first-token latency, RAM, load time",
+   "checks": [
+    "speed protocol: temp 0, 128-tok gens x3, threads=big cores",
+    "feeds on-device vs LAN vs hybrid decision"
+   ]
+  },
+  {
+   "id": "M7",
+   "scope": "n8n-style node canvas for the viewport desktop (GraphEdit): agents as GraphNodes with live transcript preview + status, wires = whisper pipes, port-drag wiring, ComfyUI steals (in-node streaming, busy highlight), zoom/pan/minimap",
+   "checks": [
+    "console 49 / ant 53 / api 22 / bus 13 green x2",
+    "boot clean",
+    "see DIARY M7"
+   ]
+  }
+ ],
+ "future_canon_from_orchestrator_art_unbuilt": [
+  "per-soul telemetry (CPU/Mem/Battery sparkline)",
+  "Agent Control verbs: Run / Pause / Reassign / Settings per soul",
+  "Orchestrator actions: Plan Tasks / Allocate Agents / Monitor Health / Reschedule / Optimize",
+  "task labels + progress bars per soul (Status: Controlled, Task: Explore, Progress: 67%)"
+ ]
+}

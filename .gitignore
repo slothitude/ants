@@ -1,0 +1,12 @@
+.godot/
+*.tmp
+keys.json
+builds/
+android/build/build/
+android/build/.gradle/
+android/build/src/main/assets/
+android/build/libs/
+pybridge/build/
+pybridge/.gradle/
+thirdparty/
+thirdparty/llama-jni/build/
